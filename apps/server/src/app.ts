@@ -3,8 +3,12 @@ import { Express } from "express";
 import session from "express-session";
 import passport from "passport";
 import authRoutes from "./routes/auth.routes";
-import dotenv from "dotenv"
+import postRoutes from './routes/post.routes'
+import likeRoutes from "./routes/like.routes";
+import commentRoutes from "./routes/comment.routes";
+import followRoutes from "./routes/follow.routes";
 import "./middlewares/passport";
+import dotenv from "dotenv"
 dotenv.config();
 const app : Express = express();
 
@@ -23,5 +27,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
+app.use("/posts", postRoutes);
+app.use("/likes", likeRoutes);
+app.use("/comments", commentRoutes);
+app.use("/users/follow", followRoutes);
 
 export default app;

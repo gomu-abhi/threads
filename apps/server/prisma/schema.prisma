@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,6 +12,63 @@ model User {
   email     String   @unique
   password  String
   name      String?
-  provider  String?   // "local" or "google"
+  provider  String   @default("local")
   createdAt DateTime @default(now())
+
+  // Relations
+  posts     Post[]        @relation("UserPosts")
+  followers Follow[]      @relation("UserFollowers")
+  following Follow[]      @relation("UserFollowing")
+  likes     Like[]
+  comments  Comment[]
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  authorId  String
+
+  // Relations
+  author    User     @relation("UserPosts", fields: [authorId], references: [id])
+  likes     Like[]
+  comments  Comment[]
+}
+
+model Follow {
+  id           String   @id @default(uuid())
+  followerId   String
+  followingId  String
+  createdAt    DateTime @default(now())
+
+  // Relations
+  follower     User     @relation("UserFollowing", fields: [followerId], references: [id])
+  following    User     @relation("UserFollowers", fields: [followingId], references: [id])
+
+  @@unique([followerId, followingId]) // prevent duplicate follows
+}
+
+model Like {
+  id      String   @id @default(uuid())
+  userId  String
+  postId  String
+  createdAt DateTime @default(now())
+
+  // Relations
+  user    User     @relation(fields: [userId], references: [id])
+  post    Post     @relation(fields: [postId], references: [id])
+
+  @@unique([userId, postId]) // one like per user per post
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  createdAt DateTime @default(now())
+  userId    String
+  postId    String
+
+  // Relations
+  user      User     @relation(fields: [userId], references: [id])
+  post      Post     @relation(fields: [postId], references: [id])
 }
