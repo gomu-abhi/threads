@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { PrismaClient } from "@prisma/client";
-import { registerSchema, loginSchema } from "../validators/authSchemas";
+import { registerSchema, loginSchema} from "../validators/authSchemas"
 import { treeifyError } from "zod";
 
 const prisma = new PrismaClient();
@@ -52,7 +52,7 @@ export const login = (req: Request, res: Response) => {
 
   const user = req.user;
   if (!user) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(409).json({ message: "Invalid Credentials" });
   }
 
   res.status(200).json({

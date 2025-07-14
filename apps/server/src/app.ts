@@ -8,12 +8,17 @@ import likeRoutes from "./routes/like.routes";
 import commentRoutes from "./routes/comment.routes";
 import followRoutes from "./routes/follow.routes";
 import "./middlewares/passport";
+import cors from "cors"
 import dotenv from "dotenv"
 dotenv.config();
 const app : Express = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  origin: "http://localhost:3000",
+  credentials: true,
+}));
 
 app.use(
   session({

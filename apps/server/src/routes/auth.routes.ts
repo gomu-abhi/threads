@@ -31,8 +31,9 @@ router.get(
   }),
   (req, res) => {
     // Redirect to frontend after successful Google login
-    res.redirect("/");
+    res.redirect("http://localhost:3000/feed");
   }
 );
+
 
 export default router;
