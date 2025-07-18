@@ -7,6 +7,7 @@ import postRoutes from './routes/post.routes'
 import likeRoutes from "./routes/like.routes";
 import commentRoutes from "./routes/comment.routes";
 import followRoutes from "./routes/follow.routes";
+import userRoutes from "./routes/user.routes"
 import "./middlewares/passport";
 import cors from "cors"
 import dotenv from "dotenv"
@@ -36,5 +37,6 @@ app.use("/posts", postRoutes);
 app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/users/follow", followRoutes);
+app.use("/users", userRoutes)
 
 export default app;

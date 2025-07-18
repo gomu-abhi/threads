@@ -3,9 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { createPostSchema } from "../validators/postSchemas";
 import { treeifyError } from "zod";
 
-const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'],
-});
+const prisma = new PrismaClient();
 
 
 export const createPost = async (req: Request, res: Response) => {
@@ -34,7 +32,6 @@ export const createPost = async (req: Request, res: Response) => {
 
 export const getAllPosts = async (_req: Request, res: Response) => {
   try {
-    console.time("request sent");
     const posts = await prisma.post.findMany({
       take: 10, // paginate!
       orderBy: { createdAt: "desc" },
@@ -51,12 +48,36 @@ export const getAllPosts = async (_req: Request, res: Response) => {
       },
     });    
     res.status(200).json(posts);
-    console.timeEnd("request sent");
   } catch (error) {
     console.error("Fetch posts error:", error);
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getComments = async (req: Request, res: Response) => {
+  const { id: postId } = req.params;
+
+  try {
+    const post = await prisma.post.findUnique({ where: { id: postId } });
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const comments = await prisma.comment.findMany({
+      where: { postId },
+      include: { user: true },
+      orderBy: { createdAt: "asc" },
+    });
+
+    return res.status(200).json({ comments });
+  } catch (error) {
+    console.error("Get comments error:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
 
 export const getPostById = async (req: Request, res: Response) => {
   const { id } = req.params;

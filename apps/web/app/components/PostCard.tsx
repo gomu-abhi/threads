@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { api } from "../../lib/axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline"
+import CommentThread from "./CommentThread";
 
 interface Like {
     userId: string;
@@ -33,7 +34,7 @@ export default function PostCard({ post, currentUserId, onPostDeleted }: Props) 
     const [isEditing, setIsEditing] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editText, setEditText] = useState(post.content);
-
+    const [showComments, setShowComments] =  useState(false);
     const hasLiked = likes.some((like) => like.userId === currentUserId);
 
     // Toggle Like (Optimistic Update)
@@ -134,20 +135,31 @@ export default function PostCard({ post, currentUserId, onPostDeleted }: Props) 
                 <p className="text-gray-800 mb-4">{content}</p>
             )}
 
+            {/* Like and Comments Button */}
             <div className="flex items-center gap-4">
                 <button
                     onClick={toggleLike}
                     disabled={isSubmitting}
-                    className={`px-3 py-1 rounded text-white transition ${hasLiked ? "bg-accent" : "bg-secondary"
-                        } ${isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"}`}
+                    className={`px-3 py-1 rounded text-white transition ${hasLiked ? "bg-accent" : "bg-secondary"} ${isSubmitting ? "opacity-60 cursor-not-allowed" : "hover:opacity-90"}`}
                 >
                     {hasLiked ? "Unlike" : "Like"}
                 </button>
-
                 <span className="text-sm text-gray-700">
                     {likes.length} like{likes.length !== 1 ? "s" : ""}
                 </span>
+
+                <button
+                    onClick={() => setShowComments(!showComments)}
+                    className="ml-auto text-sm text-gray-600 hover:underline"
+                >
+                    {showComments ? "Hide" : "Show"} Comments
+                </button>
             </div>
+
+            {/* Comments Section */}
+            {showComments && (
+                <CommentThread postId={post.id} currentUserId={currentUserId} />
+            )}
         </div>
     );
 }

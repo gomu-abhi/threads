@@ -5,6 +5,7 @@ import {
   getPostById,
   deletePost,
   updatePost,
+  getComments,
 } from "../controllers/post.controller";
 import { isAuthenticated } from "../middlewares/isAuthenticated";
 
