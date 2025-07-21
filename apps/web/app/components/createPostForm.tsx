@@ -49,7 +49,7 @@ export default function CreatePostForm({ onPostCreated }: { onPostCreated?: () =
   return (
     <form onSubmit={handleSubmit} className="mb-6 bg-white p-4 rounded shadow">
       <textarea
-        className="w-full border border-gray-300 rounded p-2 resize-none focus:outline-none focus:ring"
+        className="w-full border border-gray-300 rounded p-2 "
         rows={3}
         placeholder="What's on your mind?"
         value={content}

@@ -38,7 +38,7 @@ export default function FeedPage() {
       {posts.length === 0 && <p>No posts yet.</p>}
       {currentUserId &&
         posts.map((post: any) => (
-          <PostCard key={post.id} post={post} currentUserId={currentUserId} />
+          <PostCard key={post.id} post={post} currentUserId={currentUserId} showComment = {false}/>
         ))}
     </div>
   );

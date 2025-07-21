@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import { api } from "../../lib/axios";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline"
 import CommentThread from "./CommentThread";
+import Link from "next/link";
 
 interface Like {
     userId: string;
@@ -20,21 +21,25 @@ interface Post {
     createdAt: string;
     author: Author;
     likes: Like[];
+    _count: {
+        comments: number;
+      };
 }
 
 interface Props {
     post: Post;
     currentUserId: string;
     onPostDeleted?: (postId: string) => void; // to refresh feed if needed
+    showComment : boolean
 }
 
-export default function PostCard({ post, currentUserId, onPostDeleted }: Props) {
+export default function PostCard({ post, currentUserId, onPostDeleted, showComment }: Props) {
     const [likes, setLikes] = useState<Like[]>(post.likes);
     const [content, setContent] = useState(post.content);
     const [isEditing, setIsEditing] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editText, setEditText] = useState(post.content);
-    const [showComments, setShowComments] =  useState(false);
+    const [showComments, setShowComments] =  useState(showComment);
     const hasLiked = likes.some((like) => like.userId === currentUserId);
 
     // Toggle Like (Optimistic Update)
@@ -84,7 +89,9 @@ export default function PostCard({ post, currentUserId, onPostDeleted }: Props) 
         <div className="bg-white p-4 rounded shadow mb-4">
             <div className="mb-2 flex items-center justify-between gap-2 text-sm text-gray-600">
                 <div>
-                    <span className="font-semibold text-primary">{post.author.name}</span>
+                    <Link href={`/profile/${post.author.id}`}>
+                        <span className="font-semibold text-primary">{post.author.name}</span>
+                    </Link>
                     <span>·</span>
                     <span>{new Date(post.createdAt).toLocaleString()}</span>
                 </div>
@@ -132,7 +139,9 @@ export default function PostCard({ post, currentUserId, onPostDeleted }: Props) 
                     </div>
                 </div>
             ) : (
-                <p className="text-gray-800 mb-4">{content}</p>
+                <Link href={`/post/${post.id}`}>
+                    <p className="text-gray-800 mb-4">{content}</p>
+                </Link>
             )}
 
             {/* Like and Comments Button */}
@@ -152,7 +161,7 @@ export default function PostCard({ post, currentUserId, onPostDeleted }: Props) 
                     onClick={() => setShowComments(!showComments)}
                     className="ml-auto text-sm text-gray-600 hover:underline"
                 >
-                    {showComments ? "Hide" : "Show"} Comments
+                    {showComments ? "Hide" : "Show"} Comments({post._count.comments})
                 </button>
             </div>
 
