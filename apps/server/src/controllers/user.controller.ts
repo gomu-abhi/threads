@@ -114,7 +114,6 @@ export const getFollowing = async (req: Request, res: Response) => {
         following: { select: { id: true, name: true } },
       },
     });
-    // console.log(following)
     const total = await prisma.follow.count({ where: { followerId: id } });
 
     res.json({
