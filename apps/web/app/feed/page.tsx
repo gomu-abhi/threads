@@ -16,10 +16,10 @@ export default function FeedPage() {
     try {
       const [userRes, postsRes] = await Promise.all([
         api.get("/auth/me"),
-        api.get("/posts"),
+        api.get("/posts/following/"),
       ]);
       setCurrentUserId(userRes.data.id);
-      setPosts(postsRes.data);
+      setPosts(postsRes.data.posts);
     } catch (err: any) {
       setError(err.response?.data?.message || "Failed to load feed");
     }
