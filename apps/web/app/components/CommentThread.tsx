@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "../../lib/axios";
+import Link from "next/link";
 
 interface Author {
   id: string;
@@ -95,7 +96,9 @@ export default function CommentThread({ postId, currentUserId }: Props) {
           {comments.map((comment) => (
             <li key={comment.id} className="border p-3 rounded relative group">
               <div className="text-sm text-gray-700">
-                <span className="font-semibold">{comment.user.name}</span>{" "}
+                <Link href={`/profile/${comment.user.id}`}>
+                  <span className="font-semibold">{comment.user.name}</span>{" "}
+                </Link>
                 <span className="text-gray-500 text-xs">
                   {new Date(comment.createdAt).toLocaleString()}
                 </span>
