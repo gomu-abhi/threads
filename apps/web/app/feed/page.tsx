@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { api } from "../../lib/axios";
 import PostCard from "../components/PostCard";
 import CreatePostForm from "../components/createPostForm";
+import Header from "../components/Header";
 
 type Tab = "trending" | "following";
 
@@ -200,9 +201,10 @@ export default function FeedPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-6">
+    <>
+    {currentUserId && <Header currentUserId={currentUserId} />}
+    <main className="max-w-2xl mx-auto px-4 py-6">
       <h1 className="text-2xl font-bold mb-6">Your Feed</h1>
-      
       <CreatePostForm onPostCreated={handlePostCreated} />
       
       {/* Tab Navigation */}
@@ -298,6 +300,7 @@ export default function FeedPage() {
           You've reached the end of your {activeTab} feed
         </div>
       )}
-    </div>
+    </main>
+    </>
   );
 }

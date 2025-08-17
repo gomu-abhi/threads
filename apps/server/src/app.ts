@@ -8,6 +8,7 @@ import likeRoutes from "./routes/like.routes";
 import commentRoutes from "./routes/comment.routes";
 import followRoutes from "./routes/follow.routes";
 import userRoutes from "./routes/user.routes"
+import searchRoutes from "./routes/search.routes";
 import "./middlewares/passport";
 import cors from "cors"
 import dotenv from "dotenv"
@@ -38,5 +39,6 @@ app.use("/likes", likeRoutes);
 app.use("/comments", commentRoutes);
 app.use("/users/follow", followRoutes);
 app.use("/users", userRoutes)
+app.use("/search", searchRoutes);
 
 export default app;
