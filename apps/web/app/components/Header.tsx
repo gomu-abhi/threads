@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import LogoutButton from './LogoutButton';
 
 const UserIcon = () => (
     <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -57,9 +58,7 @@ export default function Header({ currentUserId }: { currentUserId: string }) {
                 Settings
               </a>
               <div className="border-t my-1"></div>
-              <a href="/auth/logout" className="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                Logout
-              </a>
+              <LogoutButton />
             </div>
           )}
         </div>

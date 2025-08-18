@@ -4,6 +4,7 @@ import { api } from "../../lib/axios";
 import PostCard from "../components/PostCard";
 import CreatePostForm from "../components/createPostForm";
 import Header from "../components/Header";
+import Link from "next/link";
 
 type Tab = "trending" | "following";
 
@@ -252,8 +253,13 @@ export default function FeedPage() {
 
       {/* Error Message */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-4">
-          {error}
+        <div className="flex items-center flex-col">
+          <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded mb-4">
+            {error}
+          </div>
+          <Link href="/login" className="text-blue-600 hover:underline">
+            Login
+          </Link>
         </div>
       )}
 
@@ -261,9 +267,9 @@ export default function FeedPage() {
       <div className="space-y-4">
         {currentPosts.length === 0 && !loading ? (
           <div className="text-center py-8 text-gray-500">
-            {activeTab === "following" 
+            {!error && (activeTab === "following" 
               ? "No posts from people you follow yet. Start following some users!" 
-              : "No trending posts at the moment."}
+              : "No trending posts at the moment.")}
           </div>
         ) : (
           currentUserId && currentPosts.map((post: Post) => (
@@ -289,13 +295,13 @@ export default function FeedPage() {
               <span>Loading more posts...</span>
             </div>
           ) : (
-            <div className="text-gray-400 text-sm">Scroll for more posts</div>
+            !error && <div className="text-gray-400 text-sm">Scroll for more posts</div>
           )}
         </div>
       )}
 
       {/* End of Feed Message */}
-      {!hasMore && currentPosts.length > 0 && (
+      {!hasMore && currentPosts.length > 0  && (
         <div className="text-center py-8 text-gray-400 text-sm border-t">
           You've reached the end of your {activeTab} feed
         </div>
